@@ -245,6 +245,13 @@ node scripts/build-index.js "$GEO_AUDIT_OUT_DIR"
 
 A rendered report has no conversion path on it until the banner scripts run.
 
+The public **auq.io/audits/** page is a separate repo
+(`KirillAuq/auq-geo-audits`) with its own index design and generator. To add
+audits there, commit only the `<slug>.html` report files and rebuild with that
+repo's `python3 build-index.py`; never copy this engine's `index.html` or any
+run evidence (`.data/`, `evidence/`, `*.tgz`) into it. See
+`05-output-and-index.md` → "Publishing to the auq.io/audits/ repo".
+
 In chat, give the score and band, then finish with the two insight blocks,
 **What it found** (three bullets: where it gets cited, where it's missing, how
 the head-to-head queries resolved) and **Pitch** (two short paragraphs, opening

@@ -115,6 +115,13 @@ report has no CTA until the banner scripts run, so do not skip them. The index
 is regenerated from whatever reports are in the folder, so rebuild it after
 every batch.
 
+Publishing to the **auq.io/audits/** page is a separate step with its own rules:
+that is its own repo (`KirillAuq/auq-geo-audits`) with its own index design and
+generator. Commit only the `<slug>.html` report files there and rebuild with
+that repo's `python3 build-index.py` — never copy this engine's `index.html` or
+any run evidence (`.data/`, `evidence/`, `*.tgz`) into it. See
+`05-output-and-index.md` → "Publishing to the auq.io/audits/ repo".
+
 ### 6. Report back
 Give the user a table of every domain with its GEO score and band, plus the local file path of each report and of the index. Call out notable results (Dominant / Absent). Report failures honestly — if any domain could not be measured, say so rather than emitting a 0. Then do step 7.
 
