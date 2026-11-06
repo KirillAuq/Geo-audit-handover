@@ -76,34 +76,62 @@ onto Gemini. `identityRequestBody()` drops it even if a caller passes it.
 
 Before reading the model answers, write a short checklist of distinct factual
 claims from the homepage only. About, `llms.txt`, and phrases copied out of an
-answer are not the benchmark. Each claim has equal weight. Store `id` and
-`text` on `claims`, and a one or two sentence `homepage.says` for the public
-line. The prompt still does not include this list.
+answer are not the benchmark. Use the same claim ids for every provider and
+every snapshot.
+
+Keep one claim per distinct capability. Do not split overlapping labels of the
+same capability into extra claims. HCM, HRIS, and "people system" are one claim
+when the homepage is describing one system.
+
+Each claim has equal weight. Store `id` and `text` on `claims`, and a one or
+two sentence `homepage.says` for the public line. The prompt still does not
+include this list.
+
+## Review, then count
+
+A person reviews each full answer against that fixed list. The decision needs
+a written reason that says what in the answer supports or misses the claim.
+A synonym counts as matched only when that reason says the meaning is the same.
+A missing preferred word is not a miss when the answer describes the capability.
+A missing capability is a miss.
+
+Generic wording such as "AI-powered" does not support a claim about agentic
+workflows. The answer has to describe agents or workflows that act.
+
+String presence, a regex, or phrase overlap is not this review. Do not turn
+those hits into decisions, and do not publish a percent from them. A tally that
+only checked an exact slogan, the letters HCM, and any generic AI mention is
+not a validated description match.
+
+On each answer, the reviewer marks every homepage claim:
+
+- `matched`, with `reason` (a synonym is allowed when the reason says why)
+- `missed`, the capability is absent, with `reason`
+- `contradiction`, the answer states a conflicting fact, with `reason`
+- `not_reviewed`, or a decision with no real reason, left out of the math
 
 ## Description-match percent
 
-This number is a reproducible count. It is not a confidence score, not a
-factual-accuracy rate, and not a model similarity.
+After those reasons exist, `src/llm-identity-match.js` divides matched checks
+by evaluated checks for each provider. `matched` counts. `missed` and
+`contradiction` count as evaluated and not matched. Rows without a written
+reason are dropped. Providers are then averaged with equal weight, so two
+samples do not outweigh one sample. Round to a whole percent.
 
-On each answer, a person marks every homepage claim:
+The arithmetic does not decide what a sentence means. It only counts the
+review.
 
-- `matched`, including a justified semantic equivalent, with a short excerpt and note
-- `missed`, the claim is absent (an omission, not a contradiction)
-- `contradiction`, the answer states a conflicting fact, with a note
-- `not_reviewed`, left out of the math
-
-`src/llm-identity-match.js` then, for each provider, divides matched
-checks by evaluated checks. `matched` counts. `missed` and `contradiction`
-count as evaluated and not matched. `not_reviewed` is dropped. Providers are
-then averaged with equal weight, so two samples do not outweigh one sample.
-Round to a whole percent.
+This number is a count of reviewed homepage claims. It is not a confidence
+score, not a probability, and not a model similarity. Say that in this
+procedure. Do not add that boilerplate to the client page.
 
 Unreviewed answers and missing evidence are not scored. They are not zero.
 A provider with no reviewed checks is excluded. A failed provider is excluded
 and the public line uses the answers and models that were actually scored.
 
 Phrase overlap in `llm-identity-compare.js` must not create these decisions or
-this percent.
+this percent. The sanitized fixture under `fixtures/llm-identity/` stores
+answers for audit. It is not a validated percent.
 
 Keep the claim list, each decision, the excerpt, and the per-provider
 numerator and denominator in `llm-identity.json`. That file stays in the run
