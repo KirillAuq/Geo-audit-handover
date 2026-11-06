@@ -9,7 +9,7 @@ Given a list of domains from the user, this skill produces one AIO positioning r
 
 ## What it produces
 
-For each domain: a single self-contained HTML report scoring how Google's AI Overviews represent the brand — trigger rate, citation rate, identity match, topic breadth — rolled into an overall GEO score (0–100) with a band (Absent / Low / Competitive / Dominant). The report uses the AUQ house design and renders the AUQ top-nav, an "AI Overview Performance" section immediately followed by the "Queries We Tested" log (columns: Query, brand in the AI answer, top sources cited; no Type column), key findings, identity gap, citations, and an observed-peers set. It does **not** include a "30-Day Priority Moves" or a "Success Metrics" section, and it never calls the metered console.anthropic.com key.
+For each domain: a single self-contained HTML report scoring how Google's AI Overviews represent the brand. Trigger rate, citation rate, theme presence, and topic breadth roll into an overall GEO score (0–100) with a band (Absent / Low / Competitive / Dominant). The 20% theme-presence component is not a check that an LLM answer is correct. The report also has "What do LLMs say the brand is?" when `llm-identity.json` was collected. Otherwise that section says Not tested. The report uses the AUQ house design and renders the AUQ top-nav, an "AI Overview Performance" section, the "Queries We Tested" log (columns: Query, brand in the AI answer, top sources cited; no Type column), key findings, citations, and an observed-peers set. It does **not** include a "30-Day Priority Moves" or a "Success Metrics" section, and it never calls the metered console.anthropic.com key.
 
 ## Prerequisites (one-time — see SETUP.md)
 
@@ -95,6 +95,16 @@ node "$GEO_AUDIT_ENGINE_DIR/scripts/audit-one.js" acme.com "$GEO_AUDIT_IDENTITY_
 ```
 
 Do not report scores or hand over files until every requested domain is clean.
+
+### 4b. What LLMs say the brand is
+This is not part of the score and not part of `run-batch.sh`. After the AI
+Overview run, follow `06-llm-identity.md`. Ask exactly `What does {Brand} do?`
+on at least three providers, two snapshots each. Keep the raw answers in the
+run directory. The client HTML is only the homepage line, the reviewed
+description-match percent, and a short miss list. Do not publish model ids,
+costs, or full answers beside `{brand}.html`. If the claim review is missing,
+the section says not scored and shows no percent. A failed provider is left
+out of the count, not scored as zero.
 
 ### 5. Finish the reports (local, no host)
 Reports stay on disk. There is no publish target, no repo, and no network step.

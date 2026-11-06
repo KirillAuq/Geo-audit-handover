@@ -8,7 +8,7 @@ A live example of the older hand-authored report format, kept for reference:
 https://auq.io/audits/8020rei.html — note that this is **not** what the engine
 produces. See `03-report-spec.md`.
 
-## The six files
+## The numbered files
 
 | File | Read it when |
 |---|---|
@@ -18,6 +18,7 @@ produces. See `03-report-spec.md`.
 | `03-report-spec.md` | You are changing the report, or writing the JSON the renderer consumes. |
 | `04-bundle-map.md` | You need to know what every file is, and the known rough edges. |
 | `05-output-and-index.md` | You have finished reports and want them banner-stamped and indexed. All local, no host. |
+| `06-llm-identity.md` | You are asking what LLMs say the brand is. Separate from the score. |
 
 ## What the audit is
 
@@ -32,7 +33,8 @@ the brand cannot inflate its own score by being cited for its own name.
 ## Two ways to run it
 
 **One-shot (deterministic, batchable).** One command per domain, no human in the
-loop, no LLM anywhere in the chain.
+loop, and no LLM in the score. The separate identity check in `06-llm-identity.md`
+is not part of this command. Re-render after it if the report should include it.
 
 ```bash
 node scripts/audit-one.js acme.com identities/acme.json out/acme.html
@@ -72,9 +74,10 @@ domain
 ```
 
 Measurement uses DataForSEO keys, which AUQ provides separately. No Anthropic
-key is used on either path. Reports are local HTML files: nothing publishes to a
-host, no step uses git, and there is nothing to install. See
-`05-output-and-index.md`.
+key is used on the score path. The LLM identity check uses the same DataForSEO
+login and password, on the LLM Responses Live endpoints, and does not change
+the score. Reports are local HTML files: nothing publishes to a host, no step
+uses git, and there is nothing to install. See `05-output-and-index.md`.
 
 ## Layout
 

@@ -1,6 +1,8 @@
 > **Runtime file, not current guidance.** `src/audit-references.js` reads this
 > at run time and injects it into agent memory, so it must stay here. For how
-> the audit works today, read `geo-audit-handover/01-method.md`.
+> the audit works today, read `geo-audit-handover/01-method.md`. The separate
+> LLM identity check is `geo-audit-handover/06-llm-identity.md`. This file is
+> not that procedure.
 
 # Methodology — Brand-Only GEO Audit
 

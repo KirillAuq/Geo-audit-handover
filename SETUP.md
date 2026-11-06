@@ -41,9 +41,12 @@ cp .env.example .env
 Nothing runs without this. Every query comes back "fetch failed" and the audit
 scores 0.
 
-DataForSEO is the only required service. Ahrefs is optional and only weights
-queries by search volume. The Anthropic key in `.env.example` is never used:
-analysis runs on the local Claude Code session.
+DataForSEO is the only required service. The same login and password run the
+AI Overview queue and, separately, `scripts/collect-identity.js`. Ahrefs is
+optional and only weights queries by search volume. The Anthropic key in
+`.env.example` is never used: analysis runs on the local Claude Code session.
+`DATAFORSEO_LOGIN` and `DATAFORSEO_PASSWORD` are accepted aliases and must not
+be printed or passed on the command line.
 
 Treat `.env` as a secret. Do not commit it, paste it into a ticket, or forward
 it. If it leaks, tell AUQ so the keys can be rotated.
