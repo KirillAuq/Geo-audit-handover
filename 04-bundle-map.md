@@ -206,7 +206,8 @@ an operational runbook appended.
 |---|---|
 | `aio-read.js` | **The measurement.** Builds the query set (7 decision-stage modifiers per category). Default `standard` mode: posts each sample round as one Standard-queue `task_post` at high priority, 60s apart, collects via `tasks_ready` and `task_get`, and re-reads refused, failed, unreadable or straggling tasks over Live (with 3 retries at 6s for unreadable AI Overviews). `live` mode reads one Live request at a time. Buckets each query by registrable domain and records `aio.mode`, `aio.durationSec` and `aio.cost`. |
 | `llm-identity.js` | LLM Responses Live client for the identity check. Prompt builder, Gemini country-field omission, parsers. |
-| `llm-identity-compare.js` | Phrase overlap against a dated baseline. No confidence percentage. |
+| `llm-identity-compare.js` | Phrase overlap only. Not the description-match percent. |
+| `llm-identity-match.js` | Equal-weight description-match percent from reviewed homepage claims. |
 | `insights.js` | `buildFacts(memory, canon)` and `formatFacts(facts)`. Score, theme verdicts (same rule as the coverage rollup) with the domains cited instead, branded and comparison queries with the own domain's source position, top domains where the brand is absent, Wikipedia citations, homepage title. Pure, no network. |
 | `run-progress.js` | Progress hooks for `measure()`: a start line, queue status lines while reads are outstanding, one output line per finished query, and a partial save of `memory.json` after each. Used by `audit-one.js`, `collect-only.js` and `scripts/aio-read.js`. |
 | `load-env.js` | Minimal `.env` parser replacing dotenv, so the audit path has no npm dependencies. Existing environment variables win, matching dotenv. |

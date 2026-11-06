@@ -288,7 +288,7 @@ These apply to every line of client-facing copy. They are requirements.
 - [ ] Em-dash count is zero.
 - [ ] En-dash count is zero.
 - [ ] No third-party tool names in the report's own prose (`check-reports.js` passes).
-- [ ] "What do LLMs say the brand is?" quotes real snapshots with model id and time, or says Not tested. It does not reuse AI Overview citations as the answer.
+- [ ] "What do LLMs say the brand is?" is the homepage line, one description-match percent, and a short miss list, or it says not scored. It does not dump answers or reuse AI Overview citations.
 - [ ] The peers section is observed, never seeded from an input list.
 - [ ] The band is stated in words next to the number.
 - [ ] Every coverage row traces to a query in the tested-queries table.

@@ -150,13 +150,13 @@ node scripts/render-roboflow.js <runDir|canonical.json> out.html
 ```
 
 A run directory prefers `canonical.json` when it is present, so the stored
-score is what renders. `llm-identity.json` in that directory is merged in for
-the identity section only. Writes one self-contained HTML file. The AUQ
-top-nav, the tested-queries table, and the jump links into it are injected
-automatically. No post-processing.
+score is what renders. `llm-identity.json` in that directory supplies the
+description match and is not copied into the output folder. The HTML is one
+self-contained file. The identity section is the homepage line, the percent,
+and a short miss list. It does not print the answers.
 
-`audit-one.js` does not call this check. Re-render after `collect-identity.js`
-if that HTML should include the snapshots. Until then the section says Not tested.
+`audit-one.js` does not call this check. Re-render after the claim review is
+in `llm-identity.json`. Until then the section says not scored.
 
 ## Batch of domains
 

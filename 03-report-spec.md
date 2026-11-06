@@ -201,7 +201,7 @@ restyle per report.
 1. Top nav
 2. Hero, with the AI Visibility Score and band
 3. Executive summary
-4. What do LLMs say the brand is? Dated brand-owned baseline, then one card per provider. Real excerpts with model id, time, and web search. Not tested when that provider was not run or failed. This section does not feed the score. The 20% component remains theme presence.
+4. What do LLMs say the brand is? Three short parts only: what the homepage says, the description-match percent, and what the models missed or got wrong. About 100 to 160 words. No answer dump. Not scored when the claim review is missing. This percent does not feed the Google AI Overview score. The 20% component remains theme presence.
 5. Content and entity coverage
 6. AI Overview performance, plus high-value queries where the brand ranks but is not quoted
 7. Queries we tested

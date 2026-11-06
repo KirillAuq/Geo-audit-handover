@@ -72,47 +72,60 @@ not. Sending it to Gemini returns status `40501`. This check omits the field
 for every provider, including ChatGPT, so a ChatGPT example cannot be copied
 onto Gemini. `identityRequestBody()` drops it even if a caller passes it.
 
-## Brand-owned baseline
+## Homepage claim list
 
-Fetch it in the same session, after or before the model calls, and store it in
-a different file from the prompt. Minimum is the homepage. Also take `/about`
-and `/llms.txt` when they exist. Keep the URL, the fetch date, and short
-quotes. Note slogan variants when the site itself uses more than one category
-label.
+Before reading the model answers, write a short checklist of distinct factual
+claims from the homepage only. About, `llms.txt`, and phrases copied out of an
+answer are not the benchmark. Each claim has equal weight. Store `id` and
+`text` on `claims`, and a one or two sentence `homepage.says` for the public
+line. The prompt still does not include this list.
 
-The baseline is the comparison source. It is never placed in `user_prompt`.
+## Description-match percent
 
-## Comparison
+This number is a reproducible count. It is not a confidence score, not a
+factual-accuracy rate, and not a model similarity.
 
-Qualitative only. No confidence percentage.
+On each answer, a person marks every homepage claim:
 
-Vocabulary:
+- `matched`, including a justified semantic equivalent, with a short excerpt and note
+- `missed`, the claim is absent (an omission, not a contradiction)
+- `contradiction`, the answer states a conflicting fact, with a note
+- `not_reviewed`, left out of the math
 
-- `exact_or_near_slogan`, the answer contains the brand's own category phrase
-- `semantic_alignment`, same meaning, and a person made that judgment
-- `omission`, a supplied baseline theme is absent
-- `contradiction`, a clear conflict with a brand-owned claim
-- `unknown`, not enough evidence
+`src/llm-identity-match.js` then, for each provider, divides matched
+checks by evaluated checks. `matched` counts. `missed` and `contradiction`
+count as evaluated and not matched. `not_reviewed` is dropped. Providers are
+then averaged with equal weight, so two samples do not outweigh one sample.
+Round to a whole percent.
 
-The automatic helper only does phrase overlap. It may say
-`exact_or_near_slogan` when a supplied category label is contained in the
-answer, and `omission` when a supplied phrase is absent. It does not emit
-`semantic_alignment` or `contradiction`. Factual stays `unknown`, with the
-sentence "This check does not verify every generated factual claim." A reviewer
-may attach the other verdicts. The report labels those as a reviewer note.
+Unreviewed answers and missing evidence are not scored. They are not zero.
+A provider with no reviewed checks is excluded. A failed provider is excluded
+and the public line uses the answers and models that were actually scored.
 
-## Report
+Phrase overlap in `llm-identity-compare.js` must not create these decisions or
+this percent.
 
-Section title: **What do LLMs say {brand} is?**
+Keep the claim list, each decision, the excerpt, and the per-provider
+numerator and denominator in `llm-identity.json`. That file stays in the run
+directory. It is not uploaded next to `{brand}.html`.
 
-Show the dated baseline, then one card per provider. Quote a short excerpt of
-the actual answer with provider, returned model id, UTC time, and whether web
-search was on. A failed or missing provider says **Not tested** and nothing else
-in that card.
+## Public report
 
-`audit-one.js` does not run this check. A one-shot HTML file says Not tested
-until you collect and re-render. That is intentional. The score command must
-not gain a hidden billable call.
+One section, about 100 to 160 words when a percent is shown. Three parts only:
+
+1. What the brand says it is, from `homepage.says`.
+2. The percent, with one line such as "Share of homepage claims reflected across 6 answers from 3 models." If a model returned no answer, add that it is left out.
+3. What the models got wrong or missed. If no contradiction was recorded, say no clear factual errors, then name the concrete omissions. Do not call an omission a contradiction. Do not say every statement in the answers was verified.
+
+Do not publish provider dumps, model ids, timestamps, transport, costs, search
+citations, `llms.txt`, or the Google AI Overview citation table. Do not add a
+collapsed copy of the answers.
+
+The Google AI Overview score is untouched. Its 20% component is theme presence
+in that query set. This percent is a different number.
+
+`audit-one.js` does not run this check. Until a reviewed `llm-identity.json`
+is merged at render time, the section says not scored and shows no percent.
 
 ## Command
 
@@ -120,16 +133,15 @@ From `engine/`, after the AI Overview run has written `canonical.json`:
 
 ```bash
 node scripts/collect-identity.js acme.com "Acme" \
-  --baseline /path/to/acme.baseline.json \
   --samples 2 \
   --out /path/to/run/llm-identity.json
 node scripts/render-roboflow.js /path/to/run out/acme.html
 ```
 
-`--baseline` is a JSON object with `fetchedAt`, `sources[]` (`url`, `title`,
-`quotes`), and optional `categoryLabels`, `buyerPhrases`, `capabilityPhrases`,
-`positioningPhrases`. If the credentials are unset, the script writes status
-`not_tested` and exits 2. It does not call the network.
+Collect stores the raw answers. A person then adds `homepage`, `claims`, and
+per-answer `claims` decisions before the render that clients see. If the
+credentials are unset, the script writes status `not_tested` and exits 2. It
+does not call the network.
 
 Offline check, no API calls:
 
@@ -138,4 +150,5 @@ node scripts/test-llm-identity.js
 ```
 
 The fixture under `engine/fixtures/llm-identity/` is one sanitized run. It is
-not a default brand and it is not reused as another company's answers.
+not a default brand and it is not reused as another company's answers. Without
+reviewed claim decisions it renders as not scored.

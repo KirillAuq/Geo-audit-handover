@@ -99,10 +99,12 @@ Do not report scores or hand over files until every requested domain is clean.
 ### 4b. What LLMs say the brand is
 This is not part of the score and not part of `run-batch.sh`. After the AI
 Overview run, follow `06-llm-identity.md`. Ask exactly `What does {Brand} do?`
-on at least three providers, two snapshots each. Write `llm-identity.json` into
-the run directory and re-render. A provider that fails stays Not tested. Do
-not paste AI Overview citations into that section. If the credentials are
-unset, leave the Not tested file in place and say so.
+on at least three providers, two snapshots each. Keep the raw answers in the
+run directory. The client HTML is only the homepage line, the reviewed
+description-match percent, and a short miss list. Do not publish model ids,
+costs, or full answers beside `{brand}.html`. If the claim review is missing,
+the section says not scored and shows no percent. A failed provider is left
+out of the count, not scored as zero.
 
 ### 5. Finish the reports (local, no host)
 Reports stay on disk. There is no publish target, no repo, and no network step.
