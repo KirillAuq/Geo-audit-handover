@@ -150,14 +150,15 @@ was actually read. A theme the brand sells but no query tested is
 
 ## Stage 5 — Analysis
 
-From the buckets and the answer texts:
+From the buckets:
 
 - **Rates.** AIO trigger rate, brand citation rate, position when cited.
-- **Identity statements.** Verbatim sentences where AIO describes the brand.
-  These become quote blocks, set side by side with the brand's own language.
-- **Recurring descriptors.** Words AIO consistently attaches to the brand.
-- **Notably absent descriptors.** The brand's own pillars that appear in no AIO
-  answer where it was cited. This gap is the heart of the report.
+- **Direct identity.** Not this stage. "What do LLMs say the brand is?" is
+  `06-llm-identity.md`. Those answers are quoted only from that check. Do not
+  invent them from citation domains. The AI Overview rows do not keep answer
+  text for this purpose.
+- **Theme presence.** Which category themes are owned, named, or invisible.
+  That rollup is what the 20% score component measures.
 - **Buyer-journey coverage.** Owned / partial / invisible counts per stage.
 - **Off-site sources.** External domains AIO pulls from in the category, grouped
   into listicle publishers, educational hubs, review sites, communities.
@@ -174,7 +175,7 @@ because the query set is category-only.
 |---|---|---|
 | In-Overview inclusion | 35% | owned / triggered. The core citation rate. |
 | Category presence | 25% | (owned + mentioned-not-cited) / triggered. |
-| Identity accuracy | 20% | Share of category themes where the brand appears at all. |
+| Identity accuracy | 20% | Share of themes where the brand is cited or named at all. Theme presence, not answer correctness. The engine label is "How AI describes the brand". |
 | Topic coverage breadth | 20% | Share of category themes the brand owns outright. |
 
 Each component is scored 0 to 100, then weighted.
@@ -192,7 +193,8 @@ State the components in the report so the score is reproducible. The band label
 is printed in words next to the number.
 
 These four components and these band labels are what `scripts/normalize_aio.js`
-actually computes. Verified against the code.
+actually computes. Verified against the code. The LLM identity check does not
+change the weights, the formula, or a historical score.
 
 The report shows exactly these four components, each labelled with its weight,
 so the breakdown reconciles with the total. Verified: on a real run scoring 13,

@@ -1,6 +1,7 @@
 > **Runtime file, not current guidance.** `src/audit-references.js` reads this
 > at run time and injects it into agent memory, so it must stay here. For how
-> the audit works today, read `geo-audit-handover/01-method.md`. Parts of this
+> the audit works today, read `geo-audit-handover/01-method.md`. The separate
+> LLM identity check is `geo-audit-handover/06-llm-identity.md`. Parts of this
 > file describe the retired Ahrefs and docx path.
 
 # GEO Audit Spec — v1: Brand-Only (No Competitor Analysis)

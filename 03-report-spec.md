@@ -67,7 +67,8 @@ The renderer reads one object. You author it during the analysis stage.
   },
 
   "analysis": {
-    "identityGap": { /* brand-says vs AI-says, quotes, descriptors, gap */ },
+    "identityGap": { /* legacy theme notes. Not rendered as LLM quotes. */ },
+    "llmIdentity": { /* optional. Or a sibling llm-identity.json. See 06-llm-identity.md. */ },
     "contentCoverage": { /* theme rows, buyer-journey coverage */ },
     "aioPerformance": {
       "aioTriggerCount": 0,
@@ -200,7 +201,7 @@ restyle per report.
 1. Top nav
 2. Hero, with the AI Visibility Score and band
 3. Executive summary
-4. Identity in AI Overviews
+4. What do LLMs say the brand is? Dated brand-owned baseline, then one card per provider. Real excerpts with model id, time, and web search. Not tested when that provider was not run or failed. This section does not feed the score. The 20% component remains theme presence.
 5. Content and entity coverage
 6. AI Overview performance, plus high-value queries where the brand ranks but is not quoted
 7. Queries we tested
@@ -210,7 +211,7 @@ restyle per report.
 11. 90-day roadmap
 12. Footer
 
-Google AI Overviews only. No ChatGPT columns, no AI search volume.
+The score is Google AI Overviews only. No ChatGPT columns and no AI search volume in the score tables. Provider names in the identity section are that separate check, not score columns.
 
 ## The gap between the two
 

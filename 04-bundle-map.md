@@ -2,6 +2,12 @@
 
 What every file is. Read `README.md` first.
 
+The numbered docs at the repository root are the same files as
+`geo-audit-handover/` inside `audit-handover.zip`, including `02-running-an-audit.md`
+and `06-llm-identity.md`. `skill/SKILL.md` matches root `SKILL.md`.
+`engine/Audit-SKILL.md` matches root `Audit-SKILL.md`. Change both copies, then
+rebuild the zip, so they do not drift. The engine code lives in the zip.
+
 ## State of the bundle
 
 **Standalone.** The project lives in `~/Claude Projects/audit-handover/`, with
@@ -181,6 +187,8 @@ an operational runbook appended.
 |---|---|
 | `audit-one.js` | **The batch unit.** Domain plus identity in, HTML out, one process, no LLM. Site fetch and AIO read in parallel, then `normalize_aio` then `render-roboflow`. Prints one status line. 52 lines. |
 | `collect-only.js` | Measurement only. Writes `site` and `aio` into run memory. Step 1 of the two-step path. |
+| `collect-identity.js` | Separate LLM identity check. Writes `llm-identity.json`. Does not score and does not send the baseline in the prompt. |
+| `test-llm-identity.js` | Offline tests and the sanitized fixture render. No network. |
 | `normalize_aio.js` | **The scorer.** memory.json to canonical.json. Buckets, themes, the weighted score, the templated narrative, and `analysis.insightFacts` (via `src/insights.js`). No API calls. |
 | `insights.js` | Prints the insight fact sheet per domain from the latest complete run: the grounding for the "What it found" and "Pitch" chat step. Uses `analysis.insightFacts`, or computes it from `memory.json` for older runs. `--json` for the structured object. No network. Non-zero exit if a domain has no complete run. |
 | `render-roboflow.js` | canonical.json to HTML. AUQ house design, top-nav, score block, tested-queries table, jump links. |
@@ -197,6 +205,8 @@ an operational runbook appended.
 | Path | What it is |
 |---|---|
 | `aio-read.js` | **The measurement.** Builds the query set (7 decision-stage modifiers per category). Default `standard` mode: posts each sample round as one Standard-queue `task_post` at high priority, 60s apart, collects via `tasks_ready` and `task_get`, and re-reads refused, failed, unreadable or straggling tasks over Live (with 3 retries at 6s for unreadable AI Overviews). `live` mode reads one Live request at a time. Buckets each query by registrable domain and records `aio.mode`, `aio.durationSec` and `aio.cost`. |
+| `llm-identity.js` | LLM Responses Live client for the identity check. Prompt builder, Gemini country-field omission, parsers. |
+| `llm-identity-compare.js` | Phrase overlap against a dated baseline. No confidence percentage. |
 | `insights.js` | `buildFacts(memory, canon)` and `formatFacts(facts)`. Score, theme verdicts (same rule as the coverage rollup) with the domains cited instead, branded and comparison queries with the own domain's source position, top domains where the brand is absent, Wikipedia citations, homepage title. Pure, no network. |
 | `run-progress.js` | Progress hooks for `measure()`: a start line, queue status lines while reads are outstanding, one output line per finished query, and a partial save of `memory.json` after each. Used by `audit-one.js`, `collect-only.js` and `scripts/aio-read.js`. |
 | `load-env.js` | Minimal `.env` parser replacing dotenv, so the audit path has no npm dependencies. Existing environment variables win, matching dotenv. |

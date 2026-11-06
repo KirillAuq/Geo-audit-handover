@@ -288,7 +288,7 @@ These apply to every line of client-facing copy. They are requirements.
 - [ ] Em-dash count is zero.
 - [ ] En-dash count is zero.
 - [ ] No third-party tool names in the report's own prose (`check-reports.js` passes).
-- [ ] The identity section has the brand-says / AI-says structure.
+- [ ] "What do LLMs say the brand is?" quotes real snapshots with model id and time, or says Not tested. It does not reuse AI Overview citations as the answer.
 - [ ] The peers section is observed, never seeded from an input list.
 - [ ] The band is stated in words next to the number.
 - [ ] Every coverage row traces to a query in the tested-queries table.
@@ -299,8 +299,10 @@ These apply to every line of client-facing copy. They are requirements.
   meaningless score. This is the single biggest quality lever.
 - **Category roots that double.** "IoT platform" plus a platform modifier gives
   "IoT platform platform". Use bare roots.
-- **Wrong AI surface.** This is Google AI Overviews only. Not AI Mode, not
-  ChatGPT, not Perplexity, not Gemini.
+- **Wrong AI surface for the score.** The 0 to 100 score is Google AI Overviews
+  only. Not AI Mode. The section "What do LLMs say the brand is?" does ask
+  ChatGPT, Gemini, Claude, and Perplexity. Those answers stay out of the score
+  and out of the AI Overview query set. See `06-llm-identity.md`.
 - **Seeding peers.** Peers are observed. Passing a competitor list in crosses
   into a different audit.
 - **Naming the search-intelligence tool in the report.** Run the check.
